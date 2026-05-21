@@ -68,6 +68,10 @@
   gap: var(--space-3);
 }
 
+.checkout-row + .checkout-row {
+  margin-top: var(--space-3);
+}
+
 .checkout-field {
   display: flex;
   flex-direction: column;

@@ -2,6 +2,7 @@
   background-color: var(--color-primary);
   color: #fff;
   margin-top: var(--space-7);
+  padding-top: var(--space-2);
 }
 
 .footer__inner {

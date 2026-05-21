@@ -74,11 +74,18 @@ export default function Header({ favCount = 0, cartCount = 0 }) {
             {menuOpen && (
               <div className="header__dropdown">
                 <Link
+                  to="/profile"
+                  className="header__dropdown-item"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="header__dropdown-icon">👤</span> Профиль
+                </Link>
+                <Link
                   to="/login"
                   className="header__dropdown-item"
                   onClick={() => setMenuOpen(false)}
                 >
-                  <span className="header__dropdown-icon">👤</span> Войти
+                  <span className="header__dropdown-icon">🔑</span> Войти
                 </Link>
                 <Link
                   to="/register"
