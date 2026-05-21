@@ -42,10 +42,10 @@ export default function Header({ favCount = 0, cartCount = 0 }) {
             ♥
             {favCount > 0 && <span className="header__badge">{favCount}</span>}
           </Link>
-          <button className="header__icon-btn" aria-label="Корзина">
+          <Link to="/cart" className="header__icon-btn" aria-label="Корзина">
             🛒
             {cartCount > 0 && <span className="header__badge">{cartCount}</span>}
-          </button>
+          </Link>
         </div>
       </div>
     </header>

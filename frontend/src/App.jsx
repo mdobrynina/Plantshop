@@ -6,10 +6,22 @@ import Footer from './components/Footer/Footer.jsx'
 import HomePage from './pages/HomePage.jsx'
 import CatalogPage from './pages/CatalogPage.jsx'
 import FavoritesPage from './pages/FavoritesPage.jsx'
+import CartPage from './pages/CartPage.jsx'
 
 export default function App() {
-  const { favorites, toggle: toggleFavorite, isFavorite } = useFavorites()
-  const { cart, addToCart, count: cartCount } = useCart()
+  const { favorites, toggle: toggleFavorite } = useFavorites()
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    changeQty,
+    toggleSelect,
+    toggleSelectAll,
+    removeSelected,
+    count: cartCount,
+    selectedCount,
+    selectedTotal,
+  } = useCart()
 
   const sharedProps = {
     favorites,
@@ -24,6 +36,21 @@ export default function App() {
         <Route path="/" element={<HomePage {...sharedProps} />} />
         <Route path="/catalog" element={<CatalogPage {...sharedProps} />} />
         <Route path="/favorites" element={<FavoritesPage {...sharedProps} />} />
+        <Route
+          path="/cart"
+          element={
+            <CartPage
+              cart={cart}
+              onChangeQty={changeQty}
+              onRemove={removeFromCart}
+              onToggleSelect={toggleSelect}
+              onToggleSelectAll={toggleSelectAll}
+              onRemoveSelected={removeSelected}
+              selectedCount={selectedCount}
+              selectedTotal={selectedTotal}
+            />
+          }
+        />
       </Routes>
       <Footer />
     </BrowserRouter>
