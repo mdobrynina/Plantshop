@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage.jsx'
 import CatalogPage from './pages/CatalogPage.jsx'
 import FavoritesPage from './pages/FavoritesPage.jsx'
 import CartPage from './pages/CartPage.jsx'
+import RegisterPage from './pages/RegisterPage.jsx'
+import LoginPage from './pages/LoginPage.jsx'
 
 export default function App() {
   const { favorites, toggle: toggleFavorite } = useFavorites()
@@ -51,6 +53,8 @@ export default function App() {
             />
           }
         />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
