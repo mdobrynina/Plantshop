@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './CartPage.css'
+
+const VALID_PROMO = { MOH10: 10, GREEN20: 20 }
 
 function noun(n, one, few, many) {
   const mod10 = n % 10
@@ -22,6 +25,28 @@ export default function CartPage({
 }) {
   const allSelected = cart.length > 0 && cart.every((item) => item.selected)
   const hasSelected = cart.some((item) => item.selected)
+
+  const [promoOpen,    setPromoOpen]    = useState(false)
+  const [promoInput,   setPromoInput]   = useState('')
+  const [promoDiscount, setPromoDiscount] = useState(0)
+  const [promoError,   setPromoError]   = useState('')
+  const [promoApplied, setPromoApplied] = useState('')
+
+  const applyPromo = () => {
+    const code = promoInput.trim().toUpperCase()
+    if (VALID_PROMO[code]) {
+      setPromoDiscount(VALID_PROMO[code])
+      setPromoApplied(code)
+      setPromoError('')
+    } else {
+      setPromoError('Промокод не найден')
+      setPromoDiscount(0)
+      setPromoApplied('')
+    }
+  }
+
+  const discountAmount = promoDiscount ? Math.round(selectedTotal * promoDiscount / 100) : 0
+  const finalTotal = selectedTotal - discountAmount
 
   if (cart.length === 0) {
     return (
@@ -113,14 +138,22 @@ export default function CartPage({
               <span>Итого</span>
               <span>{selectedTotal} ₽</span>
             </div>
+            {discountAmount > 0 && (
+              <div className="cart-summary__row cart-summary__row--discount">
+                <span>Скидка {promoDiscount}%</span>
+                <span>−{discountAmount} ₽</span>
+              </div>
+            )}
+            <div className="cart-summary__divider" />
+            <div className="cart-summary__row cart-summary__row--total">
+              <span>Итого</span>
+              <span>{finalTotal} ₽</span>
+            </div>
             <p className="cart-summary__hint">Без учёта возможной стоимости доставки</p>
             {selectedCount > 0 ? (
               <Link to="/checkout" className="btn btn-primary cart-summary__btn">
                 К оформлению<br />
-                <small>
-                  {selectedCount} {noun(selectedCount, 'товар', 'товара', 'товаров')}{' '}
-                  {selectedTotal} ₽
-                </small>
+                <small>{selectedCount} {noun(selectedCount, 'товар', 'товара', 'товаров')} · {finalTotal} ₽</small>
               </Link>
             ) : (
               <button className="btn btn-primary cart-summary__btn" disabled>
@@ -129,10 +162,38 @@ export default function CartPage({
             )}
 
             <div className="cart-promo">
-              <button className="cart-promo__toggle">
-                <span>%</span> Промокоды и сертификаты
-                <span className="cart-promo__chevron">∨</span>
+              <button className="cart-promo__toggle" onClick={() => setPromoOpen((v) => !v)}>
+                <span className="cart-promo__pct">%</span>
+                Промокоды и сертификаты
+                <span className="cart-promo__chevron">{promoOpen ? '∧' : '∨'}</span>
               </button>
+              {promoOpen && (
+                <div className="cart-promo__body">
+                  {promoApplied ? (
+                    <div className="cart-promo__applied">
+                      Промокод <strong>{promoApplied}</strong> применён — скидка {promoDiscount}%
+                      <button className="cart-promo__remove" onClick={() => { setPromoApplied(''); setPromoDiscount(0); setPromoInput('') }}>✕</button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="cart-promo__row">
+                        <input
+                          className="cart-promo__input"
+                          placeholder="Введите промокод"
+                          value={promoInput}
+                          onChange={(e) => { setPromoInput(e.target.value); setPromoError('') }}
+                          onKeyDown={(e) => e.key === 'Enter' && applyPromo()}
+                        />
+                        <button className="btn btn-primary cart-promo__apply" onClick={applyPromo}>
+                          Применить
+                        </button>
+                      </div>
+                      {promoError && <p className="cart-promo__error">{promoError}</p>}
+                      <p className="cart-promo__hint">Попробуй: MOH10 или GREEN20</p>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

@@ -7,10 +7,21 @@ import './CatalogPage.css'
 export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }) {
   const [searchParams] = useSearchParams()
   const activeCategory = searchParams.get('category')
+  const query = searchParams.get('q')?.toLowerCase().trim() ?? ''
 
-  const filtered = activeCategory
-    ? products.filter((p) => p.category === activeCategory)
-    : products
+  const filtered = products.filter((p) => {
+    const matchCat = activeCategory ? p.category === activeCategory : true
+    const matchQ   = query
+      ? p.name.toLowerCase().includes(query) || p.categoryName.toLowerCase().includes(query)
+      : true
+    return matchCat && matchQ
+  })
+
+  const title = query
+    ? `Результаты поиска: «${searchParams.get('q')}»`
+    : activeCategory
+      ? filtered[0]?.categoryName ?? 'Каталог'
+      : 'Популярные растения'
 
   return (
     <div className="catalog-page">
@@ -18,12 +29,13 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
         <Sidebar />
 
         <main className="catalog-main">
-          <h2 className="catalog-main__title">
-            {activeCategory ? filtered[0]?.categoryName ?? 'Каталог' : 'Популярные растения'}
-          </h2>
+          <h2 className="catalog-main__title">{title}</h2>
 
           {filtered.length === 0 ? (
-            <p className="catalog-main__empty">Нет товаров в этой категории</p>
+            <div className="catalog-main__empty">
+              <p>🌿 Ничего не найдено</p>
+              <p>Попробуй другой запрос или выбери категорию из меню</p>
+            </div>
           ) : (
             <div className="catalog-main__grid">
               {filtered.map((product) => (

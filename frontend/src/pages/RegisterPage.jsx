@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './AuthPage.css'
 
-export default function RegisterPage() {
+export default function RegisterPage({ onLogin }) {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -37,6 +37,7 @@ export default function RegisterPage() {
     const e2 = validate()
     if (Object.keys(e2).length > 0) { setErrors(e2); return }
     // TODO: отправка на Spring Boot backend
+    onLogin?.()
     alert('Регистрация успешна! (заглушка — подключим backend позже)')
   }
 

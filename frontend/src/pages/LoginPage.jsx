@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './AuthPage.css'
 
-export default function LoginPage() {
+export default function LoginPage({ onLogin }) {
   const [form, setForm] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
 
@@ -18,6 +18,7 @@ export default function LoginPage() {
     if (!form.password) e2.password = 'Введите пароль'
     if (Object.keys(e2).length > 0) { setErrors(e2); return }
     // TODO: отправка на Spring Boot backend
+    onLogin?.()
     alert('Вход выполнен! (заглушка — подключим backend позже)')
   }
 

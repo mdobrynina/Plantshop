@@ -240,6 +240,12 @@
   opacity: 0.85;
 }
 
+/* Итог со скидкой */
+.cart-summary__row--discount {
+  color: #4caf50;
+  font-weight: 600;
+}
+
 /* Промокод */
 .cart-promo {
   margin-top: var(--space-4);
@@ -256,11 +262,84 @@
   color: var(--color-text);
 }
 
+.cart-promo__pct {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 .cart-promo__chevron {
   margin-left: auto;
   font-size: 11px;
   color: var(--color-text-muted);
 }
+
+.cart-promo__body {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cart-promo__row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.cart-promo__input {
+  flex: 1;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.cart-promo__input:focus { border-color: var(--color-primary); }
+
+.cart-promo__apply {
+  padding: 0 14px;
+  height: 38px;
+  font-size: var(--font-size-sm);
+}
+
+.cart-promo__error {
+  font-size: 12px;
+  color: #e05a5a;
+}
+
+.cart-promo__hint {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.cart-promo__applied {
+  font-size: var(--font-size-sm);
+  color: #4caf50;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cart-promo__remove {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  transition: color 0.12s;
+}
+
+.cart-promo__remove:hover { color: #e05a5a; }
 
 /* Регистрация */
 .cart-reg__text {

@@ -9,11 +9,21 @@ export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart
   return (
     <div className="favorites-page">
       <div className="container">
-        <h1 className="favorites-page__title">Избранное</h1>
+        <h1 className="favorites-page__title">
+          Избранное
+          {favProducts.length > 0 && (
+            <span className="favorites-page__count">{favProducts.length}</span>
+          )}
+        </h1>
 
         {favProducts.length === 0 ? (
           <div className="favorites-page__empty">
-            <p>Вы ещё не добавили ни одного растения в избранное</p>
+            <div className="favorites-page__empty-icon">♡</div>
+            <h2 className="favorites-page__empty-title">Здесь пока пусто</h2>
+            <p className="favorites-page__empty-text">
+              Нажимай ♡ на карточках растений, которые понравились,<br />
+              и они появятся здесь
+            </p>
             <Link to="/catalog" className="btn btn-primary">Перейти в каталог</Link>
           </div>
         ) : (

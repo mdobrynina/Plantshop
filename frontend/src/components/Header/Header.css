@@ -107,6 +107,91 @@
   padding: 0 4px;
 }
 
+/* Поиск */
+.header__search-form {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.header__search-btn {
+  position: absolute;
+  right: 6px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+/* Бургер — виден только на мобильных */
+.header__burger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-soft);
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+/* Мобильное меню */
+.mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-bg);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-5);
+  overflow-y: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.mobile-menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.mobile-menu__link {
+  display: block;
+  padding: 14px var(--space-3);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  transition: background-color 0.12s ease;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+}
+
+.mobile-menu__link:hover {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.mobile-menu__auth {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+  margin-top: var(--space-4);
+}
+
 /* Дропдаун меню */
 .header__menu-wrap {
   position: relative;
@@ -145,5 +230,9 @@
 }
 
 @media (max-width: 900px) {
-  .header__nav { display: none; }
+  .header__nav    { display: none; }
+  .header__burger { display: inline-flex; }
+  .header__search { min-width: 130px; }
+  /* Скрываем дропдаун-меню на мобильных — есть бургер */
+  .header__menu-wrap { display: none; }
 }
