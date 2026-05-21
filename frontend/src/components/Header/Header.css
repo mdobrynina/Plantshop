@@ -1,9 +1,19 @@
 .header {
   border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-bg);
+  background-color: rgba(255, 255, 255, 0.95);
   position: sticky;
   top: 0;
   z-index: 10;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.header--scrolled {
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(47, 74, 58, 0.08);
+  border-bottom-color: rgba(228, 231, 229, 0.6);
 }
 
 .header__inner {
@@ -16,14 +26,13 @@
 .header__logo {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  color: var(--color-primary);
-  font-weight: 700;
-  font-size: 22px;
+  flex-shrink: 0;
 }
 
-.header__logo-mark {
-  font-size: 20px;
+.header__logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .header__nav {
@@ -64,7 +73,13 @@
   border-color: var(--color-primary);
 }
 
-.header__cart {
+.header__nav-link--active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.header__icon-btn {
+  position: relative;
   width: 36px;
   height: 36px;
   border-radius: var(--radius-md);
@@ -73,13 +88,161 @@
   align-items: center;
   justify-content: center;
   font-size: 16px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-text);
 }
 
-.header__cart:hover {
+.header__icon-btn:hover {
   background-color: var(--color-primary);
   color: #fff;
 }
 
+.header__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background-color: #e05a5a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+/* Поиск */
+.header__search-form {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.header__search-btn {
+  position: absolute;
+  right: 6px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+/* Бургер — виден только на мобильных */
+.header__burger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-soft);
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+/* Мобильное меню */
+.mobile-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-bg);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-5);
+  overflow-y: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.mobile-menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.mobile-menu__link {
+  display: block;
+  padding: 14px var(--space-3);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  transition: background-color 0.12s ease;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+}
+
+.mobile-menu__link:hover {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.mobile-menu__auth {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+/* Дропдаун меню */
+.header__menu-wrap {
+  position: relative;
+}
+
+.header__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.header__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  transition: background-color 0.12s ease;
+}
+
+.header__dropdown-item:hover {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.header__dropdown-icon {
+  font-size: 14px;
+}
+
 @media (max-width: 900px) {
-  .header__nav { display: none; }
+  .header__nav    { display: none; }
+  .header__burger { display: inline-flex; }
+  .header__search { min-width: 130px; }
+  /* Скрываем дропдаун-меню на мобильных — есть бургер */
+  .header__menu-wrap { display: none; }
 }
