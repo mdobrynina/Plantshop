@@ -18,7 +18,7 @@ export default function Features() {
         </Reveal>
         <div className="features__grid">
           {features.map((f, i) => (
-            <Reveal key={f.title} delay={(i % 3) + 1}>
+            <Reveal key={f.title} delay={(i % 3) + 1} stretch>
               <div className="feature-card">
                 <div className="feature-card__icon">{f.icon}</div>
                 <h3 className="feature-card__title">{f.title}</h3>
