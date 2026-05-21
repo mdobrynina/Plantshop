@@ -171,8 +171,16 @@ export default function CartPage({
                 <div className="cart-promo__body">
                   {promoApplied ? (
                     <div className="cart-promo__applied">
-                      Промокод <strong>{promoApplied}</strong> применён — скидка {promoDiscount}%
-                      <button className="cart-promo__remove" onClick={() => { setPromoApplied(''); setPromoDiscount(0); setPromoInput('') }}>✕</button>
+                      <div className="cart-promo__tag">
+                        <span className="cart-promo__tag-code">{promoApplied}</span>
+                        <span className="cart-promo__tag-discount">−{promoDiscount}%</span>
+                        <button
+                          className="cart-promo__remove"
+                          onClick={() => { setPromoApplied(''); setPromoDiscount(0); setPromoInput('') }}
+                          aria-label="Убрать промокод"
+                        >✕</button>
+                      </div>
+                      <p className="cart-promo__applied-hint">✓ Скидка применена</p>
                     </div>
                   ) : (
                     <>
@@ -198,10 +206,12 @@ export default function CartPage({
           </div>
 
           <div className="cart-summary__box cart-reg">
-            <p className="cart-reg__text">
-              Скидка 10% на первые 3 заказа после регистрации
-            </p>
-            <button className="btn btn-primary cart-reg__btn">Зарегистрироваться</button>
+            <div className="cart-reg__icon">🎁</div>
+            <p className="cart-reg__title">Скидка 10% на первые 3 заказа</p>
+            <p className="cart-reg__sub">Зарегистрируйся и получи скидку уже на этот заказ</p>
+            <Link to="/register" className="btn btn-secondary cart-reg__btn">
+              Зарегистрироваться
+            </Link>
           </div>
         </div>
 

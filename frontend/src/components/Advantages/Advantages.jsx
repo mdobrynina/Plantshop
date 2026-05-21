@@ -1,3 +1,4 @@
+import Reveal from '../Reveal/Reveal.jsx'
 import './Advantages.css'
 
 const items = [
@@ -23,10 +24,13 @@ export default function Advantages() {
   return (
     <section className="advantages" id="advantages">
       <div className="container advantages__inner">
-        <div className="advantages__image">
-          <img src="/images/monstera.png" alt="Монстера" />
-        </div>
+        <Reveal>
+          <div className="advantages__image">
+            <img src="/images/monstera.png" alt="Монстера" />
+          </div>
+        </Reveal>
 
+        <Reveal delay={1}>
         <div className="advantages__content">
           <h2 className="advantages__title">Наши преимущества</h2>
           <p className="advantages__lead">
@@ -44,6 +48,7 @@ export default function Advantages() {
           </ol>
           <a href="#catalog" className="btn btn-primary">Начать покупку</a>
         </div>
+        </Reveal>
       </div>
     </section>
   )

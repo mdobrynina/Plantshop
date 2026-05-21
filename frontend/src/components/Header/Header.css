@@ -1,9 +1,19 @@
 .header {
   border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-bg);
+  background-color: rgba(255, 255, 255, 0.95);
   position: sticky;
   top: 0;
   z-index: 10;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.header--scrolled {
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(47, 74, 58, 0.08);
+  border-bottom-color: rgba(228, 231, 229, 0.6);
 }
 
 .header__inner {

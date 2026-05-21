@@ -1,10 +1,11 @@
+import Reveal from '../Reveal/Reveal.jsx'
 import './About.css'
 
 export default function About() {
   return (
     <section className="about" id="about">
       <div className="container about__inner">
-        <div className="about__content">
+        <Reveal><div className="about__content">
           <h2 className="about__title">О нас</h2>
           <p className="about__lead">
             moh — это интернет-магазин растений с душой, где каждый
@@ -17,11 +18,11 @@ export default function About() {
             было раньше.
           </p>
           <a href="#catalog" className="btn btn-primary">Начать покупку</a>
-        </div>
+        </div></Reveal>
 
-        <div className="about__image">
+        <Reveal delay={1}><div className="about__image">
           <img src="/images/monstera.png" alt="Растения moh" />
-        </div>
+        </div></Reveal>
       </div>
     </section>
   )

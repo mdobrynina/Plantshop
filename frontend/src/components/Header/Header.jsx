@@ -15,8 +15,15 @@ export default function Header({ favCount = 0, cartCount = 0, isLoggedIn = false
   const [menuOpen,   setMenuOpen]   = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [query,      setQuery]      = useState('')
+  const [scrolled,   setScrolled]   = useState(false)
   const menuRef  = useRef(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -39,7 +46,7 @@ export default function Header({ favCount = 0, cartCount = 0, isLoggedIn = false
 
   return (
     <>
-      <header className="header">
+      <header className={`header${scrolled ? ' header--scrolled' : ''}`}>
         <div className="container header__inner">
           <Link to="/" className="header__logo">
             <img src="/images/logo.svg" alt="moh" className="header__logo-img" />
