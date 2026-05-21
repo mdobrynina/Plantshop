@@ -10,6 +10,7 @@ import CartPage from './pages/CartPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
+import ScrollToHash from './components/ScrollToHash/ScrollToHash.jsx'
 
 export default function App() {
   const { favorites, toggle: toggleFavorite } = useFavorites()
@@ -34,6 +35,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToHash />
       <Header favCount={favorites.length} cartCount={cartCount} />
       <Routes>
         <Route path="/" element={<HomePage {...sharedProps} />} />
