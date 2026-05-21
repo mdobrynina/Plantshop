@@ -10,6 +10,7 @@ import CartPage from './pages/CartPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
+import CheckoutPage from './pages/CheckoutPage.jsx'
 import ScrollToHash from './components/ScrollToHash/ScrollToHash.jsx'
 
 export default function App() {
@@ -59,6 +60,16 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/product/:id" element={<ProductPage {...sharedProps} />} />
+        <Route
+          path="/checkout"
+          element={
+            <CheckoutPage
+              cart={cart}
+              selectedCount={selectedCount}
+              selectedTotal={selectedTotal}
+            />
+          }
+        />
       </Routes>
       <Footer />
     </BrowserRouter>

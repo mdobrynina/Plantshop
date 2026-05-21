@@ -1,0 +1,245 @@
+.checkout-page {
+  padding: var(--space-5) 0 var(--space-7);
+  min-height: 60vh;
+}
+
+.checkout-page--empty,
+.checkout-page--success {
+  display: flex;
+  align-items: center;
+}
+
+.checkout-page--empty .container,
+.checkout-page--success .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  padding: var(--space-7) 0;
+}
+
+.checkout-success__icon {
+  font-size: 72px;
+}
+
+.checkout-success__title {
+  font-size: var(--font-size-h2);
+  color: var(--color-primary);
+}
+
+.checkout-success__text {
+  color: var(--color-text-muted);
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.checkout-page__title {
+  font-size: var(--font-size-h2);
+  font-weight: 700;
+  margin-bottom: var(--space-5);
+}
+
+/* Двухколоночный лейаут */
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* Секция формы */
+.checkout-section {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.checkout-section__title {
+  font-size: var(--font-size-h3);
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+}
+
+.checkout-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.checkout-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.checkout-input {
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.checkout-input:focus { border-color: var(--color-primary); }
+
+.checkout-input--error { border-color: #e05a5a; }
+
+.checkout-error {
+  font-size: 12px;
+  color: #e05a5a;
+}
+
+.checkout-textarea {
+  height: auto;
+  min-height: 100px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+/* Варианты доставки */
+.checkout-delivery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.delivery-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.delivery-option input[type="radio"] { display: none; }
+
+.delivery-option--active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-soft);
+}
+
+.delivery-option__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.delivery-option__label {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+}
+
+.delivery-option__desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.delivery-option__price {
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+/* Кнопка отправки */
+.checkout-submit {
+  width: 100%;
+  justify-content: center;
+  padding: 16px;
+  font-size: var(--font-size-lg);
+}
+
+/* Блок итогов */
+.checkout-summary {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  position: sticky;
+  top: 80px;
+}
+
+.checkout-summary__title {
+  font-size: var(--font-size-h3);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+}
+
+.checkout-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.checkout-item {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.checkout-item__img {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--color-primary-soft);
+}
+
+.checkout-item__info {
+  flex: 1;
+}
+
+.checkout-item__name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.checkout-item__qty {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.checkout-item__total {
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+}
+
+.checkout-summary__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-3) 0;
+}
+
+.checkout-summary__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.checkout-summary__row--total {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+@media (max-width: 900px) {
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+  .checkout-summary { position: static; }
+  .checkout-row { grid-template-columns: 1fr; }
+}

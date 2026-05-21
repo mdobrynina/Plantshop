@@ -114,16 +114,19 @@ export default function CartPage({
               <span>{selectedTotal} ₽</span>
             </div>
             <p className="cart-summary__hint">Без учёта возможной стоимости доставки</p>
-            <button
-              className="btn btn-primary cart-summary__btn"
-              disabled={selectedCount === 0}
-            >
-              К оформлению<br />
-              <small>
-                {selectedCount} {noun(selectedCount, 'товар', 'товара', 'товаров')}{' '}
-                {selectedTotal} ₽
-              </small>
-            </button>
+            {selectedCount > 0 ? (
+              <Link to="/checkout" className="btn btn-primary cart-summary__btn">
+                К оформлению<br />
+                <small>
+                  {selectedCount} {noun(selectedCount, 'товар', 'товара', 'товаров')}{' '}
+                  {selectedTotal} ₽
+                </small>
+              </Link>
+            ) : (
+              <button className="btn btn-primary cart-summary__btn" disabled>
+                Выберите товары
+              </button>
+            )}
 
             <div className="cart-promo">
               <button className="cart-promo__toggle">
