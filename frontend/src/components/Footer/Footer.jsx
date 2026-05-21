@@ -2,10 +2,10 @@ import './Footer.css'
 
 export default function Footer() {
   return (
-    <footer className="footer">
+    <footer className="footer" id="contacts">
       <div className="container footer__inner">
         <div className="footer__col">
-          <div className="footer__logo">🌿 moh</div>
+          <img src="/images/logo.svg" alt="moh" className="footer__logo-img" />
           <p className="footer__tagline">Природа в твоём доме</p>
         </div>
 

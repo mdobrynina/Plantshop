@@ -4,10 +4,12 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="container hero__inner">
-        <div className="hero__image" aria-hidden="true">
-          {/* Замени на реальное фото: положи в frontend/public/images/hero.jpg
-              и подставь src="/images/hero.jpg" в <img/> ниже */}
-          <div className="hero__image-placeholder">🌿</div>
+        <div className="hero__image">
+          <img
+            src="/images/monstera.png"
+            alt="Монстера — тропическое растение"
+            className="hero__img"
+          />
         </div>
 
         <div className="hero__content">

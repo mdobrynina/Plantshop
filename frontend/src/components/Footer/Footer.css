@@ -12,9 +12,10 @@
   padding-bottom: var(--space-5);
 }
 
-.footer__logo {
-  font-size: 22px;
-  font-weight: 700;
+.footer__logo-img {
+  height: 36px;
+  width: auto;
+  filter: brightness(0) invert(1);
   margin-bottom: var(--space-2);
 }
 

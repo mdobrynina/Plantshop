@@ -1,28 +1,34 @@
+import { Link, NavLink } from 'react-router-dom'
 import './Header.css'
 
 const navLinks = [
-  { label: 'Каталог', href: '#catalog' },
-  { label: 'Преимущества', href: '#features' },
-  { label: 'О нас', href: '#about' },
-  { label: 'Доставка', href: '#delivery' },
-  { label: 'Отзывы', href: '#reviews' },
-  { label: 'Контакты', href: '#contacts' },
+  { label: 'Каталог',      to: '/catalog' },
+  { label: 'Преимущества', to: '/#advantages' },
+  { label: 'О нас',        to: '/#about' },
+  { label: 'Доставка',     to: '/#delivery' },
+  { label: 'Отзывы',       to: '/#reviews' },
+  { label: 'Контакты',     to: '/#contacts' },
 ]
 
-export default function Header() {
+export default function Header({ favCount = 0, cartCount = 0 }) {
   return (
     <header className="header">
       <div className="container header__inner">
-        <a href="#" className="header__logo">
-          <span className="header__logo-mark">🌿</span>
-          <span className="header__logo-text">moh</span>
-        </a>
+        <Link to="/" className="header__logo">
+          <img src="/images/logo.svg" alt="moh" className="header__logo-img" />
+        </Link>
 
         <nav className="header__nav">
           {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="header__nav-link">
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                `header__nav-link${isActive && link.to === '/catalog' ? ' header__nav-link--active' : ''}`
+              }
+            >
               {link.label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
@@ -32,8 +38,13 @@ export default function Header() {
             placeholder="Поиск по растениям"
             className="header__search"
           />
-          <button className="header__cart" aria-label="Корзина">
+          <Link to="/favorites" className="header__icon-btn" aria-label="Избранное">
+            ♥
+            {favCount > 0 && <span className="header__badge">{favCount}</span>}
+          </Link>
+          <button className="header__icon-btn" aria-label="Корзина">
             🛒
+            {cartCount > 0 && <span className="header__badge">{cartCount}</span>}
           </button>
         </div>
       </div>
