@@ -9,6 +9,7 @@ import FavoritesPage from './pages/FavoritesPage.jsx'
 import CartPage from './pages/CartPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
+import ProductPage from './pages/ProductPage.jsx'
 
 export default function App() {
   const { favorites, toggle: toggleFavorite } = useFavorites()
@@ -55,6 +56,7 @@ export default function App() {
         />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/product/:id" element={<ProductPage {...sharedProps} />} />
       </Routes>
       <Footer />
     </BrowserRouter>
