@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { api } from '../api/api.js'
 import './CheckoutPage.css'
 
 const DELIVERY_METHODS = [
@@ -25,7 +26,8 @@ export default function CheckoutPage({ cart, selectedCount, selectedTotal }) {
     firstName: '', lastName: '', phone: '', email: '',
     address: '', city: '', comment: '',
   })
-  const [errors, setErrors] = useState({})
+  const [errors,  setErrors]  = useState({})
+  const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
   const deliveryPrice = DELIVERY_METHODS.find((m) => m.id === delivery)?.price ?? 0
@@ -45,11 +47,27 @@ export default function CheckoutPage({ cart, selectedCount, selectedTotal }) {
     return e
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const e2 = validate()
     if (Object.keys(e2).length > 0) { setErrors(e2); return }
-    setSuccess(true)
+
+    setLoading(true)
+    try {
+      await api.post('/orders', {
+        items: selectedItems.map((i) => ({ productId: i.id, quantity: i.qty })),
+        deliveryType: delivery,
+        address:  delivery === 'courier' ? `${form.city}, ${form.address}` : '',
+        phone:    form.phone,
+        comment:  form.comment,
+        total,
+      })
+      setSuccess(true)
+    } catch {
+      setErrors({ server: 'Не удалось оформить заказ. Попробуй ещё раз.' })
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (selectedItems.length === 0) {
@@ -197,8 +215,13 @@ export default function CheckoutPage({ cart, selectedCount, selectedTotal }) {
               />
             </section>
 
-            <button type="submit" className="btn btn-primary checkout-submit">
-              Оформить заказ — {total} ₽
+            {errors.server && (
+              <p style={{ color: '#c62828', background: '#fdecea', borderRadius: '8px', padding: '10px 14px', fontSize: '14px', marginBottom: '12px' }}>
+                {errors.server}
+              </p>
+            )}
+            <button type="submit" className="btn btn-primary checkout-submit" disabled={loading}>
+              {loading ? 'Оформляю...' : `Оформить заказ — ${total} ₽`}
             </button>
           </form>
 

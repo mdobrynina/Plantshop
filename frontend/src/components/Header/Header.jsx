@@ -11,7 +11,13 @@ const navLinks = [
   { label: 'Контакты',     to: '/#contacts' },
 ]
 
-export default function Header({ favCount = 0, cartCount = 0, isLoggedIn = false, onLogout }) {
+const ROLE_PANEL = {
+  ADMIN:   { to: '/admin',   label: '⚙ Панель администратора' },
+  FLORIST: { to: '/florist', label: '🌿 Рабочий стол' },
+}
+
+export default function Header({ favCount = 0, cartCount = 0, user = null, onLogout }) {
+  const isLoggedIn = !!user
   const [menuOpen,   setMenuOpen]   = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [query,      setQuery]      = useState('')
@@ -104,6 +110,15 @@ export default function Header({ favCount = 0, cartCount = 0, isLoggedIn = false
                       <Link to="/profile" className="header__dropdown-item" onClick={() => setMenuOpen(false)}>
                         <span>👤</span> Профиль
                       </Link>
+                      {ROLE_PANEL[user?.role] && (
+                        <Link
+                          to={ROLE_PANEL[user.role].to}
+                          className="header__dropdown-item header__dropdown-item--panel"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {ROLE_PANEL[user.role].label}
+                        </Link>
+                      )}
                       <button className="header__dropdown-item header__dropdown-item--btn" onClick={() => { onLogout?.(); setMenuOpen(false) }}>
                         <span>🚪</span> Выйти
                       </button>
@@ -153,6 +168,11 @@ export default function Header({ favCount = 0, cartCount = 0, isLoggedIn = false
             {isLoggedIn ? (
               <>
                 <Link to="/profile" className="mobile-menu__link" onClick={() => setMobileOpen(false)}>👤 Профиль</Link>
+                {ROLE_PANEL[user?.role] && (
+                  <Link to={ROLE_PANEL[user.role].to} className="mobile-menu__link" onClick={() => setMobileOpen(false)}>
+                    {ROLE_PANEL[user.role].label}
+                  </Link>
+                )}
                 <button className="mobile-menu__link" onClick={() => { onLogout?.(); setMobileOpen(false) }}>🚪 Выйти</button>
               </>
             ) : (

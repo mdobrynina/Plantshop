@@ -70,6 +70,16 @@
   border-color: #e05a5a;
 }
 
+.auth-form__server-error {
+  background: #fdecea;
+  color: #c62828;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-3);
+  text-align: center;
+}
+
 .auth-form__error {
   font-size: 12px;
   color: #e05a5a;

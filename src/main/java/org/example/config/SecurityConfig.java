@@ -36,9 +36,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // публичные
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+
+                        // только ADMIN
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // FLORIST и ADMIN
+                        .requestMatchers("/api/florist/**").hasAnyRole("FLORIST", "ADMIN")
+
+                        // любой авторизованный
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

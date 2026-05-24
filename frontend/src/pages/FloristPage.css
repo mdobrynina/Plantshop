@@ -1,0 +1,147 @@
+.florist-page {
+  padding: var(--space-6) 0;
+  min-height: 70vh;
+}
+
+.florist-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.florist-header__title {
+  font-size: var(--font-size-h2);
+  color: var(--color-text);
+  margin: 0 0 4px;
+}
+
+.florist-header__sub {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.florist-header__badge {
+  background: #3949ab;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Карточки заказов */
+.florist-orders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.florist-order {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.florist-order__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  cursor: pointer;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.florist-order__head:hover {
+  background: var(--color-bg-alt);
+}
+
+.florist-order__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.florist-order__id {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.florist-order__date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.florist-order__client {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.florist-order__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.florist-status-select {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  font-weight: 600;
+  background: var(--color-bg);
+  cursor: pointer;
+  outline: none;
+}
+
+.florist-order__total {
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.florist-order__arrow {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* Детали */
+.florist-order__body {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-4);
+  background: var(--color-bg-alt);
+}
+
+.florist-order__contact {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.florist-order__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.florist-order__item {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--font-size-sm);
+  align-items: center;
+}
+
+.florist-order__item-name { flex: 1; color: var(--color-text); }
+.florist-order__item-qty  { color: var(--color-text-muted); }
+.florist-order__item-price { font-weight: 600; color: var(--color-text); }

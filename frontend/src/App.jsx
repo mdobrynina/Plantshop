@@ -14,9 +14,31 @@ import LoginPage from './pages/LoginPage.jsx'
 import ProductPage from './pages/ProductPage.jsx'
 import CheckoutPage from './pages/CheckoutPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
+import AdminPage from './pages/AdminPage.jsx'
+import FloristPage from './pages/FloristPage.jsx'
+
+// user = { token, email, fullName, role } | null
+function loadUser() {
+  try {
+    const raw = localStorage.getItem('user')
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState(loadUser)
+
+  const login = (userData) => {
+    localStorage.setItem('user', JSON.stringify(userData))
+    setUser(userData)
+  }
+
+  const logout = () => {
+    localStorage.removeItem('user')
+    setUser(null)
+  }
 
   const { favorites, toggle: toggleFavorite } = useFavorites()
   const {
@@ -37,8 +59,8 @@ export default function App() {
       <Header
         favCount={favorites.length}
         cartCount={cartCount}
-        isLoggedIn={isLoggedIn}
-        onLogout={() => setIsLoggedIn(false)}
+        user={user}
+        onLogout={logout}
       />
       <Routes>
         <Route path="/" element={<HomePage {...sharedProps} />} />
@@ -59,8 +81,8 @@ export default function App() {
             />
           }
         />
-        <Route path="/register" element={<RegisterPage onLogin={() => setIsLoggedIn(true)} />} />
-        <Route path="/login"    element={<LoginPage    onLogin={() => setIsLoggedIn(true)} />} />
+        <Route path="/register" element={<RegisterPage onLogin={login} />} />
+        <Route path="/login"    element={<LoginPage    onLogin={login} />} />
         <Route path="/product/:id" element={<ProductPage {...sharedProps} />} />
         <Route
           path="/checkout"
@@ -72,7 +94,9 @@ export default function App() {
             />
           }
         />
-        <Route path="/profile" element={<ProfilePage favorites={favorites} />} />
+        <Route path="/profile" element={<ProfilePage user={user} onLogout={logout} favorites={favorites} />} />
+        <Route path="/admin"   element={<AdminPage   user={user} />} />
+        <Route path="/florist" element={<FloristPage user={user} />} />
       </Routes>
       <Footer />
     </BrowserRouter>

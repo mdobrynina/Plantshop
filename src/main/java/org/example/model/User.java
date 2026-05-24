@@ -28,7 +28,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private String role = "USER";
+    private Role role = Role.CLIENT;
 }

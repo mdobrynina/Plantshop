@@ -32,7 +32,27 @@ const STATUS_COLOR = {
   cancelled:  '#e05a5a',
 }
 
-export default function ProfilePage({ favorites }) {
+const MY_PLANTS = [
+  {
+    id: 1, name: 'Монстера деликатесная', purchasedAt: '18 мая 2026',
+    light: 'Яркий рассеянный', watering: 'Раз в неделю', care: 'легко',
+    note: 'Протирай листья влажной тряпкой раз в месяц — она будет сиять!',
+  },
+  {
+    id: 4, name: 'Алоказия амазонская', purchasedAt: '18 мая 2026',
+    light: 'Яркий рассеянный', watering: 'Раз в 5–7 дней', care: 'средне',
+    note: 'Не ставь на сквозняк — листья могут потемнеть.',
+  },
+  {
+    id: 2, name: 'Суккуленты микс', purchasedAt: '21 мая 2026',
+    light: 'Прямой солнечный', watering: 'Раз в 2 недели', care: 'легко',
+    note: 'Лучше недолить, чем перелить. Зимой полив раз в месяц.',
+  },
+]
+
+const CARE_ICON = { 'легко': '🟢', 'средне': '🟡', 'сложно': '🔴' }
+
+export default function ProfilePage({ user, onLogout, favorites }) {
   const [tab, setTab] = useState('orders')
   const [editing, setEditing] = useState(false)
   const [profile, setProfile] = useState({
@@ -80,6 +100,13 @@ export default function ProfilePage({ favorites }) {
               📦 Мои заказы
             </button>
             <button
+              className={`profile-nav__item ${tab === 'plants' ? 'profile-nav__item--active' : ''}`}
+              onClick={() => setTab('plants')}
+            >
+              🌿 Мои растения
+              <span className="profile-nav__badge">{MY_PLANTS.length}</span>
+            </button>
+            <button
               className={`profile-nav__item ${tab === 'data' ? 'profile-nav__item--active' : ''}`}
               onClick={() => setTab('data')}
             >
@@ -93,7 +120,7 @@ export default function ProfilePage({ favorites }) {
             </Link>
           </nav>
 
-          <button className="profile-logout">Выйти из аккаунта</button>
+          <button className="profile-logout" onClick={onLogout}>Выйти из аккаунта</button>
         </aside>
 
         {/* Правая часть */}
@@ -145,6 +172,50 @@ export default function ProfilePage({ favorites }) {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Мои растения */}
+          {tab === 'plants' && (
+            <div>
+              <h1 className="profile-content__title">Мои растения</h1>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)', marginBottom: 'var(--space-4)' }}>
+                Растения из твоих заказов — с советами по уходу специально для тебя
+              </p>
+              <div className="plants-list">
+                {MY_PLANTS.map((plant) => (
+                  <div key={plant.id} className="plant-card">
+                    <div className="plant-card__header">
+                      <div>
+                        <h3 className="plant-card__name">{plant.name}</h3>
+                        <span className="plant-card__date">куплено {plant.purchasedAt}</span>
+                      </div>
+                      <span className="plant-card__care">
+                        {CARE_ICON[plant.care]} {plant.care}
+                      </span>
+                    </div>
+                    <div className="plant-card__info">
+                      <div className="plant-card__tip">
+                        <span className="plant-card__tip-icon">☀️</span>
+                        <div>
+                          <span className="plant-card__tip-label">Свет</span>
+                          <span className="plant-card__tip-value">{plant.light}</span>
+                        </div>
+                      </div>
+                      <div className="plant-card__tip">
+                        <span className="plant-card__tip-icon">💧</span>
+                        <div>
+                          <span className="plant-card__tip-label">Полив</span>
+                          <span className="plant-card__tip-value">{plant.watering}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="plant-card__note">
+                      💡 {plant.note}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

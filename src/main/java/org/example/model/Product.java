@@ -35,4 +35,7 @@ public class Product {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Builder.Default
+    private boolean inStock = true;
 }
