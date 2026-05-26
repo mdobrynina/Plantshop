@@ -57,21 +57,6 @@
 
 ---
 
-## Запуск проекта
-
-```bash
-# Бэкенд (требуется Java 21, PostgreSQL)
-# Настроить src/main/resources/application.properties
-mvn spring-boot:run
-
-# Фронтенд
-cd frontend
-npm install
-npm run dev
-```
-
-Открыть: http://localhost:5173
-
 | Роль | Email | Пароль |
 |---|---|---|
 | Администратор | admin@moh.ru | admin123 |
