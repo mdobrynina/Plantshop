@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api/api.js'
 import './ProfilePage.css'
 
 const STATUS_COLOR = {
-  new:        '#2196f3',
-  processing: '#ff9800',
-  shipped:    '#9c27b0',
-  delivered:  '#4caf50',
-  cancelled:  '#e05a5a',
+  NEW:        '#2196f3',
+  PROCESSING: '#ff9800',
+  READY:      '#009688',
+  SHIPPED:    '#9c27b0',
+  DELIVERED:  '#4caf50',
+  CANCELLED:  '#e05a5a',
 }
 
 const STATUS_LABEL = {
-  new:        'Новый',
-  processing: 'В обработке',
-  shipped:    'В доставке',
-  delivered:  'Доставлен',
-  cancelled:  'Отменён',
+  NEW:        'Новый',
+  PROCESSING: 'В обработке',
+  READY:      'Готов к выдаче',
+  SHIPPED:    'В доставке',
+  DELIVERED:  'Доставлен',
+  CANCELLED:  'Отменён',
 }
 
 const CARE_ICON = { легко: '🟢', средне: '🟡', сложно: '🔴' }
@@ -31,20 +33,34 @@ function parseUser(user) {
   }
 }
 
+function loadSavedProfile(parsed) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('moh_profile') || 'null')
+    if (!saved) return { ...parsed, phone: '', birthDate: '' }
+    // Перезаписываем только поля из профиля пользователя, email берём из токена
+    return { ...saved, email: parsed.email }
+  } catch {
+    return { ...parsed, phone: '', birthDate: '' }
+  }
+}
+
 export default function ProfilePage({ user, onLogout, favorites }) {
   if (!user) return <Navigate to="/login" replace />
 
   const parsed = parseUser(user)
+  const [searchParams] = useSearchParams()
 
-  const [tab,     setTab]     = useState('orders')
+  const [tab,     setTab]     = useState(() => {
+    const t = searchParams.get('tab')
+    return ['orders','plants','data'].includes(t) ? t : 'orders'
+  })
   const [editing, setEditing] = useState(false)
-  const [profile, setProfile] = useState({ ...parsed, phone: '', birthDate: '' })
+  const [profile, setProfile] = useState(() => loadSavedProfile(parsed))
   const [draft,   setDraft]   = useState(profile)
 
   const [orders,        setOrders]        = useState([])
   const [ordersLoading, setOrdersLoading] = useState(true)
-
-  const [allProducts, setAllProducts] = useState([])
+  const [allProducts,   setAllProducts]   = useState([])
 
   useEffect(() => {
     api.get('/orders')
@@ -65,12 +81,13 @@ export default function ProfilePage({ user, onLogout, favorites }) {
         ? new Date(order.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
         : '—'
       for (const item of order.items ?? []) {
-        if (!seen.has(item.productId)) {
-          seen.add(item.productId)
-          const product = allProducts.find((p) => p.id === item.productId)
+        const pid = item.product?.id
+        if (pid && !seen.has(pid)) {
+          seen.add(pid)
+          const product = allProducts.find((p) => p.id === pid)
           plants.push({
-            id:          item.productId,
-            name:        item.productName ?? product?.name ?? '—',
+            id:          pid,
+            name:        item.product?.name ?? product?.name ?? '—',
             purchasedAt: date,
             light:       product?.light    ?? '—',
             watering:    product?.watering ?? '—',
@@ -82,13 +99,13 @@ export default function ProfilePage({ user, onLogout, favorites }) {
     return plants
   })()
 
-  const set = (field) => (e) =>
-    setDraft((p) => ({ ...p, [field]: e.target.value }))
+  const set = (field) => (e) => setDraft((p) => ({ ...p, [field]: e.target.value }))
 
   const handleSave = (e) => {
     e.preventDefault()
     setProfile(draft)
     setEditing(false)
+    localStorage.setItem('moh_profile', JSON.stringify(draft))
   }
 
   const handleCancel = () => { setDraft(profile); setEditing(false) }
@@ -111,8 +128,7 @@ export default function ProfilePage({ user, onLogout, favorites }) {
               ['plants', '🌿 Мои растения'],
               ['data',   '👤 Личные данные'],
             ].map(([key, label]) => (
-              <button
-                key={key}
+              <button key={key}
                 className={`profile-nav__item ${tab === key ? 'profile-nav__item--active' : ''}`}
                 onClick={() => setTab(key)}
               >
@@ -160,7 +176,8 @@ export default function ProfilePage({ user, onLogout, favorites }) {
                               : '—'}
                           </span>
                         </div>
-                        <span className="order-card__status" style={{ color: STATUS_COLOR[order.status] }}>
+                        <span className="order-card__status"
+                          style={{ color: STATUS_COLOR[order.status] ?? '#888' }}>
                           {STATUS_LABEL[order.status] ?? order.status}
                         </span>
                       </div>
@@ -169,16 +186,20 @@ export default function ProfilePage({ user, onLogout, favorites }) {
                         <div className="order-card__items">
                           {order.items.map((item, i) => (
                             <div key={i} className="order-card__item">
-                              <span className="order-card__item-name">{item.productName}</span>
+                              <span className="order-card__item-name">{item.product?.name ?? '—'}</span>
                               <span className="order-card__item-qty">{item.quantity} шт.</span>
-                              <span className="order-card__item-price">{item.price * item.quantity} ₽</span>
+                              <span className="order-card__item-price">
+                                {(Number(item.price) * item.quantity).toLocaleString('ru')} ₽
+                              </span>
                             </div>
                           ))}
                         </div>
                       )}
 
                       <div className="order-card__footer">
-                        <span className="order-card__total">Итого: {order.total} ₽</span>
+                        <span className="order-card__total">
+                          Итого: {Number(order.total).toLocaleString('ru')} ₽
+                        </span>
                         <Link to="/catalog" className="btn btn-secondary order-card__repeat">
                           Повторить заказ
                         </Link>
@@ -246,10 +267,8 @@ export default function ProfilePage({ user, onLogout, favorites }) {
               <div className="profile-content__header">
                 <h1 className="profile-content__title">Личные данные</h1>
                 {!editing && (
-                  <button
-                    className="btn btn-secondary profile-edit-btn"
-                    onClick={() => { setDraft(profile); setEditing(true) }}
-                  >
+                  <button className="btn btn-secondary profile-edit-btn"
+                    onClick={() => { setDraft(profile); setEditing(true) }}>
                     Редактировать
                   </button>
                 )}
@@ -269,6 +288,11 @@ export default function ProfilePage({ user, onLogout, favorites }) {
                       <span className="profile-info__value">{value || '—'}</span>
                     </div>
                   ))}
+                  {!profile.phone && (
+                    <p style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '8px' }}>
+                      Заполни телефон — он подставится автоматически при оформлении заказа
+                    </p>
+                  )}
                 </div>
               ) : (
                 <form className="profile-form" onSubmit={handleSave}>
@@ -285,16 +309,19 @@ export default function ProfilePage({ user, onLogout, favorites }) {
                   <div className="profile-form__row">
                     <div className="profile-form__field">
                       <label className="profile-form__label">Email</label>
-                      <input type="email" className="profile-form__input" value={draft.email} onChange={set('email')} />
+                      <input type="email" className="profile-form__input" value={draft.email} readOnly
+                        style={{ background: 'var(--color-bg-alt)', cursor: 'not-allowed' }} />
                     </div>
                     <div className="profile-form__field">
                       <label className="profile-form__label">Телефон</label>
-                      <input type="tel" className="profile-form__input" value={draft.phone} onChange={set('phone')} />
+                      <input type="tel" className="profile-form__input" value={draft.phone}
+                        onChange={set('phone')} placeholder="+7 (999) 000-00-00" />
                     </div>
                   </div>
                   <div className="profile-form__field">
                     <label className="profile-form__label">Дата рождения</label>
-                    <input type="date" className="profile-form__input profile-form__input--half" value={draft.birthDate} onChange={set('birthDate')} />
+                    <input type="date" className="profile-form__input profile-form__input--half"
+                      value={draft.birthDate} onChange={set('birthDate')} />
                   </div>
                   <div className="profile-form__actions">
                     <button type="submit" className="btn btn-primary">Сохранить</button>

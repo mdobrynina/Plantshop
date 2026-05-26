@@ -111,7 +111,7 @@ export default function ProductPage({ favorites, onToggleFavorite, onAddToCart }
               </button>
               <button
                 className={`product-main__fav-btn ${isFav ? 'product-main__fav-btn--active' : ''}`}
-                onClick={() => onToggleFavorite(product.id)}
+                onClick={() => onToggleFavorite(product.id, product.name)}
                 aria-label={isFav ? 'Убрать из избранного' : 'В избранное'}
               >
                 {isFav ? '♥' : '♡'}

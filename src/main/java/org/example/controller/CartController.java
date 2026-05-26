@@ -52,6 +52,13 @@ public class CartController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> clearCart(@AuthenticationPrincipal UserDetails principal) {
+        Long userId = resolveUserId(principal);
+        cartService.clearCart(userId);
+        return ResponseEntity.noContent().build();
+    }
+
     private Long resolveUserId(UserDetails principal) {
         return userRepository.findByEmail(principal.getUsername())
                 .map(User::getId)

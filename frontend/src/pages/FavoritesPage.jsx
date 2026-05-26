@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard/ProductCard.jsx'
 import { api } from '../api/api.js'
 import './FavoritesPage.css'
 
-export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart }) {
+export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart, cart = [] }) {
   const [allProducts, setAllProducts] = useState([])
   const [loading,     setLoading]     = useState(true)
 
@@ -50,6 +50,7 @@ export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart
                 isFavorite
                 onToggleFavorite={onToggleFavorite}
                 onAddToCart={onAddToCart}
+                inCart={cart.some(i => i.id === product.id)}
               />
             ))}
           </div>

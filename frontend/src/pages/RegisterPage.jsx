@@ -1,12 +1,17 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { api } from '../api/api.js'
 import './AuthPage.css'
 
 export default function RegisterPage({ onLogin }) {
+  const location     = useLocation()
+  const [params]     = useSearchParams()
+  const from         = location.state?.from || null
+  const emailFromUrl = params.get('email') || ''
+
   const [form, setForm] = useState({
     firstName: '', lastName: '', birthDate: '',
-    email: '', password: '', confirmPassword: '',
+    email: emailFromUrl, password: '', confirmPassword: '',
     subscribe: false, agree: false,
   })
   const [errors,  setErrors]  = useState({})
@@ -45,7 +50,7 @@ export default function RegisterPage({ onLogin }) {
         password:  form.password,
       })
       onLogin(data)
-      navigate('/profile')
+      navigate(from || '/profile')
     } catch (err) {
       setErrors({ server: err.message || 'Ошибка регистрации. Попробуйте другой email.' })
     } finally {

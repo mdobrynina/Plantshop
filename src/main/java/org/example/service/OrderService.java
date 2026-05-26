@@ -7,6 +7,7 @@ import org.example.model.OrderItem;
 import org.example.model.Product;
 import org.example.repository.OrderRepository;
 import org.example.repository.ProductRepository;
+import org.example.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CartService cartService;
+    private final UserRepository userRepository;
+    private final EmailService emailService;
 
     public List<Order> getUserOrders(Long userId) {
         return orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
@@ -42,6 +45,15 @@ public class OrderService {
             Product product = productRepository.findById(line.getProductId())
                     .orElseThrow(() -> new IllegalArgumentException("Товар не найден: " + line.getProductId()));
 
+            if (product.getStock() < line.getQuantity()) {
+                throw new IllegalArgumentException(
+                    "Недостаточно товара «" + product.getName() + "». В наличии: " + product.getStock() + " шт.");
+            }
+
+            product.setStock(product.getStock() - line.getQuantity());
+            product.setInStock(product.getStock() > 0);
+            productRepository.save(product);
+
             OrderItem item = OrderItem.builder()
                     .order(order)
                     .product(product)
@@ -57,6 +69,10 @@ public class OrderService {
         Order saved = orderRepository.save(order);
 
         cartService.clearCart(userId);
+
+        userRepository.findById(userId).ifPresent(user ->
+                emailService.sendOrderReceipt(user.getEmail(), user.getFirstName(), saved)
+        );
 
         return saved;
     }

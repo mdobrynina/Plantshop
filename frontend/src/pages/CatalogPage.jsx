@@ -14,7 +14,7 @@ const SORT_OPTIONS = [
 
 const CARE_OPTIONS = ['легко', 'средне', 'сложно']
 
-export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }) {
+export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart, cartIds = new Set() }) {
   const [searchParams] = useSearchParams()
   const activeCategory = searchParams.get('category')
   const query = searchParams.get('q')?.toLowerCase().trim() ?? ''
@@ -140,6 +140,7 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
                   isFavorite={favorites.includes(product.id)}
                   onToggleFavorite={onToggleFavorite}
                   onAddToCart={onAddToCart}
+                  inCart={cartIds.has(product.id)}
                 />
               ))}
             </div>

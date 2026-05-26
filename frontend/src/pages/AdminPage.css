@@ -258,6 +258,144 @@
 
 .recommendation__text { color: var(--color-text); line-height: 1.5; }
 
+/* ───── Тулбар над таблицей ───── */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.admin-toolbar__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ───── Форма добавления ───── */
+.admin-form {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.admin-form__input {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  outline: none;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-width: 140px;
+}
+
+.admin-form__input:focus { border-color: var(--color-primary); }
+
+.admin-form__input--inline {
+  width: 90px;
+  min-width: unset;
+}
+
+/* ───── Инлайн-редактирование цены ───── */
+.admin-price-edit {
+  cursor: pointer;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  border-bottom: 1px dashed var(--color-border);
+  padding-bottom: 1px;
+}
+
+.admin-price-edit:hover { border-bottom-color: var(--color-primary); color: var(--color-primary); }
+
+.admin-price-edit__icon { font-size: 11px; opacity: 0.5; }
+
+.admin-inline-edit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ───── Кнопки действий в таблице ───── */
+.admin-action-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.admin-action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.admin-action-btn--delete {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.admin-action-btn--delete:hover:not(:disabled) { background: #ffcdd2; }
+
+.admin-action-btn--save {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+/* ───── Статус заказа (select) ───── */
+.admin-status-select {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  background: var(--color-bg);
+  cursor: pointer;
+  outline: none;
+}
+
+/* ───── Роль (select) ───── */
+.admin-role-select {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-family: inherit;
+  background: var(--color-bg);
+  cursor: pointer;
+  outline: none;
+}
+
+/* ───── Наличие товара ───── */
+.admin-stock-btn {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.admin-stock-btn--yes { background: #e8f5e9; color: #2e7d32; }
+.admin-stock-btn--no  { background: #fdecea; color: #c62828; }
+.admin-stock-btn:hover { opacity: 0.75; }
+
+/* ───── Вспомогательные классы ячеек ───── */
+.td-muted { font-size: 12px; color: var(--color-text-muted); }
+.td-small { font-size: 12px; }
+
 /* ───── Медиа ───── */
 @media (max-width: 900px) {
   .analytics-grid { grid-template-columns: 1fr; }
@@ -265,4 +403,47 @@
 
 @media (max-width: 700px) {
   .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .admin-form  { flex-direction: column; align-items: stretch; }
 }
+
+/* ───── Image upload in add-product form ───── */
+.admin-form__label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.admin-form__img-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.admin-form__img-preview {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.admin-form__file-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  background: var(--color-primary-soft);
+  transition: border-color 0.15s;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.admin-form__file-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }

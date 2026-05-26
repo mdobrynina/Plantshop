@@ -38,4 +38,8 @@ public class Product {
 
     @Builder.Default
     private boolean inStock = true;
+
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int stock = 10;
 }

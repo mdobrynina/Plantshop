@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useFavorites } from './hooks/useFavorites.js'
 import { useCart } from './hooks/useCart.js'
@@ -16,8 +16,9 @@ import CheckoutPage from './pages/CheckoutPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import FloristPage from './pages/FloristPage.jsx'
+import NotFoundPage from './pages/NotFoundPage.jsx'
+import { ToastProvider } from './components/Toast/Toast.jsx'
 
-// user = { token, email, fullName, role } | null
 function loadUser() {
   try {
     const raw = localStorage.getItem('user')
@@ -40,20 +41,38 @@ export default function App() {
     setUser(null)
   }
 
-  const { favorites, toggle: toggleFavorite } = useFavorites()
+  // Авто-разлогин при истёкшем токене (событие из api.js)
+  useEffect(() => {
+    const handler = () => setUser(null)
+    window.addEventListener('moh:logout', handler)
+    return () => window.removeEventListener('moh:logout', handler)
+  }, [])
+
+  const { favorites, toggle: toggleFavorite } = useFavorites(user)
   const {
-    cart, addToCart, removeFromCart, changeQty,
+    cart, addToCart, removeFromCart, changeQty, clearCart,
     toggleSelect, toggleSelectAll, removeSelected,
     count: cartCount, selectedCount, selectedTotal,
-  } = useCart()
+  } = useCart(user)
+
+  const cartIds = new Set(cart.map(i => i.id))
+
+  // Promo state — поднят сюда чтобы скидка сохранялась при переходе корзина → оформление
+  const [promoCode,     setPromoCode]     = useState('')
+  const [promoDiscount, setPromoDiscount] = useState(0)
+  const discountAmount = promoDiscount ? Math.round(selectedTotal * promoDiscount / 100) : 0
+  const finalTotal     = selectedTotal - discountAmount
 
   const sharedProps = {
     favorites,
     onToggleFavorite: toggleFavorite,
     onAddToCart: addToCart,
+    cart,
+    cartIds,
   }
 
   return (
+    <ToastProvider>
     <BrowserRouter>
       <ScrollToHash />
       <Header
@@ -78,6 +97,10 @@ export default function App() {
               onRemoveSelected={removeSelected}
               selectedCount={selectedCount}
               selectedTotal={selectedTotal}
+              promoCode={promoCode}
+              promoDiscount={promoDiscount}
+              onPromoChange={setPromoCode}
+              onPromoDiscount={setPromoDiscount}
             />
           }
         />
@@ -90,15 +113,21 @@ export default function App() {
             <CheckoutPage
               cart={cart}
               selectedCount={selectedCount}
-              selectedTotal={selectedTotal}
+              selectedTotal={finalTotal}
+              discountAmount={discountAmount}
+              promoDiscount={promoDiscount}
+              onClearCart={clearCart}
+              user={user}
             />
           }
         />
         <Route path="/profile" element={<ProfilePage user={user} onLogout={logout} favorites={favorites} />} />
         <Route path="/admin"   element={<AdminPage   user={user} />} />
         <Route path="/florist" element={<FloristPage user={user} />} />
+        <Route path="*"        element={<NotFoundPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
+    </ToastProvider>
   )
 }
