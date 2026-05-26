@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { products } from '../data/products.js'
+import { api } from '../api/api.js'
 import './ProductPage.css'
 
 const careColors = { легко: '#4caf50', средне: '#ff9800', сложно: '#f44336' }
@@ -7,9 +8,39 @@ const careColors = { легко: '#4caf50', средне: '#ff9800', сложн�
 export default function ProductPage({ favorites, onToggleFavorite, onAddToCart }) {
   const { id } = useParams()
   const navigate = useNavigate()
-  const product = products.find((p) => p.id === Number(id))
 
-  if (!product) {
+  const [product, setProduct] = useState(null)
+  const [related, setRelated] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error,   setError]   = useState(null)
+
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    setProduct(null)
+    setRelated([])
+
+    api.get(`/products/${id}`)
+      .then((p) => {
+        setProduct(p)
+        return api.get(`/products?category=${p.category}`)
+      })
+      .then((all) => setRelated(all.filter((p) => p.id !== Number(id)).slice(0, 3)))
+      .catch(() => setError('Товар не найден'))
+      .finally(() => setLoading(false))
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="product-page">
+        <div className="container" style={{ padding: '60px 0', color: 'var(--color-text-muted)' }}>
+          🌿 Загружаем...
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !product) {
     return (
       <div className="product-page product-page--not-found">
         <div className="container">
@@ -22,15 +53,10 @@ export default function ProductPage({ favorites, onToggleFavorite, onAddToCart }
 
   const isFav = favorites?.includes(product.id)
 
-  const related = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 3)
-
   return (
     <div className="product-page">
       <div className="container">
 
-        {/* Хлебные крошки */}
         <nav className="breadcrumb">
           <Link to="/" className="breadcrumb__link">Главная</Link>
           <span className="breadcrumb__sep">›</span>
@@ -39,21 +65,15 @@ export default function ProductPage({ favorites, onToggleFavorite, onAddToCart }
           <span>{product.name}</span>
         </nav>
 
-        {/* Основной блок */}
         <div className="product-main">
           <div className="product-main__gallery">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="product-main__img"
-            />
+            <img src={product.image} alt={product.name} className="product-main__img" />
           </div>
 
           <div className="product-main__info">
             <span className="product-main__category">{product.categoryName}</span>
             <h1 className="product-main__name">{product.name}</h1>
 
-            {/* Характеристики */}
             <ul className="product-specs">
               <li className="product-specs__item">
                 <span className="product-specs__label">Высота</span>
@@ -91,7 +111,7 @@ export default function ProductPage({ favorites, onToggleFavorite, onAddToCart }
               </button>
               <button
                 className={`product-main__fav-btn ${isFav ? 'product-main__fav-btn--active' : ''}`}
-                onClick={() => onToggleFavorite(product.id)}
+                onClick={() => onToggleFavorite(product.id, product.name)}
                 aria-label={isFav ? 'Убрать из избранного' : 'В избранное'}
               >
                 {isFav ? '♥' : '♡'}
@@ -100,7 +120,6 @@ export default function ProductPage({ favorites, onToggleFavorite, onAddToCart }
           </div>
         </div>
 
-        {/* Похожие товары */}
         {related.length > 0 && (
           <section className="product-related">
             <h2 className="product-related__title">Похожие растения</h2>

@@ -70,6 +70,16 @@
   border-color: #e05a5a;
 }
 
+.auth-form__server-error {
+  background: #fdecea;
+  color: #c62828;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-3);
+  text-align: center;
+}
+
 .auth-form__error {
   font-size: 12px;
   color: #e05a5a;
@@ -117,4 +127,29 @@
   margin-top: var(--space-4);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+}
+
+/* Кнопки быстрого входа */
+.auth-quick {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  justify-content: center;
+}
+
+.auth-quick__btn {
+  background: none;
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 5px 16px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 600;
+}
+
+.auth-quick__btn:hover {
+  background: var(--color-primary-soft);
 }

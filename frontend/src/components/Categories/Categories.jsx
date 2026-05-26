@@ -3,9 +3,9 @@ import Reveal from '../Reveal/Reveal.jsx'
 import './Categories.css'
 
 const categories = [
-  { name: 'Антуриумы', emoji: '🌺', categoryId: 'anthurium' },
-  { name: 'Монстеры',  emoji: '🌿', categoryId: 'monstery' },
-  { name: 'Алоказии',  emoji: '🍃', categoryId: 'alokasii' },
+  { name: 'Антуриумы', img: '/images/антуриум_для_популярного.png', categoryId: 'антуриумы' },
+  { name: 'Монстеры',  img: '/images/монстера_для_популярного.svg', categoryId: 'монстеры'  },
+  { name: 'Алоказии',  img: '/images/алоказия_для_популярного.svg', categoryId: 'алоказии'  },
 ]
 
 export default function Categories() {
@@ -22,7 +22,9 @@ export default function Categories() {
           {categories.map((cat, i) => (
             <Reveal key={cat.name} delay={i + 1}>
               <Link to={`/catalog?category=${cat.categoryId}`} className="category-card">
-                <div className="category-card__leaf">{cat.emoji}</div>
+                <div className="category-card__img-wrap">
+                  <img src={cat.img} alt={cat.name} className="category-card__img" />
+                </div>
                 <span className="category-card__name">{cat.name}</span>
               </Link>
             </Reveal>

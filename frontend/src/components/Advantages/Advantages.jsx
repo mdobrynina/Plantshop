@@ -26,7 +26,7 @@ export default function Advantages() {
       <div className="container advantages__inner">
         <Reveal>
           <div className="advantages__image">
-            <img src="/images/monstera.png" alt="Монстера" />
+            <img src="/images/главная1.png" alt="Наши преимущества" />
           </div>
         </Reveal>
 

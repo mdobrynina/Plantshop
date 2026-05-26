@@ -35,4 +35,11 @@ public class Product {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Builder.Default
+    private boolean inStock = true;
+
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int stock = 10;
 }

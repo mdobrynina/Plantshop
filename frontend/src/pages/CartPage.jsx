@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './CartPage.css'
 
-const VALID_PROMO = { MOH10: 10, GREEN20: 20 }
+const VALID_PROMO = { MOH10: 10, GREEN20: 20, PLANTS15: 15 }
 
 function noun(n, one, few, many) {
   const mod10 = n % 10
@@ -22,27 +22,37 @@ export default function CartPage({
   onRemoveSelected,
   selectedCount,
   selectedTotal,
+  promoCode,
+  promoDiscount,
+  onPromoChange,
+  onPromoDiscount,
 }) {
   const allSelected = cart.length > 0 && cart.every((item) => item.selected)
   const hasSelected = cart.some((item) => item.selected)
 
-  const [promoOpen,    setPromoOpen]    = useState(false)
-  const [promoInput,   setPromoInput]   = useState('')
-  const [promoDiscount, setPromoDiscount] = useState(0)
-  const [promoError,   setPromoError]   = useState('')
-  const [promoApplied, setPromoApplied] = useState('')
+  const [promoOpen,  setPromoOpen]  = useState(false)
+  const [promoInput, setPromoInput] = useState(promoCode || '')
+  const [promoError, setPromoError] = useState('')
+
+  const promoApplied = promoCode || ''
 
   const applyPromo = () => {
     const code = promoInput.trim().toUpperCase()
     if (VALID_PROMO[code]) {
-      setPromoDiscount(VALID_PROMO[code])
-      setPromoApplied(code)
+      onPromoDiscount(VALID_PROMO[code])
+      onPromoChange(code)
       setPromoError('')
     } else {
       setPromoError('Промокод не найден')
-      setPromoDiscount(0)
-      setPromoApplied('')
+      onPromoDiscount(0)
+      onPromoChange('')
     }
+  }
+
+  const removePromo = () => {
+    onPromoDiscount(0)
+    onPromoChange('')
+    setPromoInput('')
   }
 
   const discountAmount = promoDiscount ? Math.round(selectedTotal * promoDiscount / 100) : 0
@@ -176,7 +186,7 @@ export default function CartPage({
                         <span className="cart-promo__tag-discount">−{promoDiscount}%</span>
                         <button
                           className="cart-promo__remove"
-                          onClick={() => { setPromoApplied(''); setPromoDiscount(0); setPromoInput('') }}
+                          onClick={removePromo}
                           aria-label="Убрать промокод"
                         >✕</button>
                       </div>

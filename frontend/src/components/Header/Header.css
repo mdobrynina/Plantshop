@@ -136,6 +136,61 @@
   line-height: 1;
 }
 
+/* Подсказки поиска */
+.header__suggestions {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.header__suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  transition: background 0.1s;
+}
+
+.header__suggestion-item:hover {
+  background: var(--color-primary-soft);
+}
+
+.header__suggestion-img {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.header__suggestion-name {
+  flex: 1;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header__suggestion-price {
+  color: var(--color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* Бургер — виден только на мобильных */
 .header__burger {
   display: none;
@@ -235,8 +290,25 @@
   color: var(--color-primary);
 }
 
+.header__dropdown-item--panel {
+  color: var(--color-primary);
+  font-weight: 600;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
 .header__dropdown-icon {
   font-size: 14px;
+}
+
+.header__dropdown-item--btn {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  text-align: left;
 }
 
 @media (max-width: 900px) {
@@ -245,4 +317,119 @@
   .header__search { min-width: 130px; }
   /* Скрываем дропдаун-меню на мобильных — есть бургер */
   .header__menu-wrap { display: none; }
+}
+
+/* ── Staff header ─────────────────────────────── */
+.header--staff {
+  background: var(--color-primary);
+  border-bottom: none;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header--staff .header__inner {
+  align-items: center;
+}
+
+.staff-header__center {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  justify-content: center;
+}
+
+.staff-header__badge {
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+}
+
+.staff-header__title {
+  color: rgba(255,255,255,0.9);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.staff-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.staff-header__name {
+  color: rgba(255,255,255,0.8);
+  font-size: var(--font-size-sm);
+}
+
+.staff-header__logout {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.staff-header__logout:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.header--staff .header__logo-img {
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 600px) {
+  .staff-header__title { display: none; }
+  .staff-header__name  { display: none; }
+}
+
+
+/* ── Модалка подтверждения выхода ── */
+.logout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-modal {
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: 0 8px 32px rgba(0,0,0,.18);
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+}
+
+.logout-modal__text {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--space-4);
+}
+
+.logout-modal__actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}
+
+.logout-modal__actions .btn {
+  white-space: nowrap;
+  padding: 8px 20px;
+  font-size: var(--font-size-sm);
 }

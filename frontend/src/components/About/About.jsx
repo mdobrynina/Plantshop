@@ -21,7 +21,7 @@ export default function About() {
         </div></Reveal>
 
         <Reveal delay={1}><div className="about__image">
-          <img src="/images/monstera.png" alt="Растения moh" />
+          <img src="/images/главная2.png" alt="О нас" />
         </div></Reveal>
       </div>
     </section>

@@ -28,10 +28,48 @@
   color: var(--color-primary);
 }
 
+.checkout-success__order-id {
+  font-size: var(--font-size-h3);
+  color: var(--color-text-muted);
+  margin-top: -8px;
+}
+
+.checkout-success__info-block {
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.checkout-success__info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+  gap: var(--space-3);
+}
+
+.checkout-success__info-row span:first-child {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.checkout-success__status { color: #2196f3; font-weight: 600; }
+
 .checkout-success__text {
   color: var(--color-text-muted);
   max-width: 420px;
   line-height: 1.6;
+  text-align: center;
+}
+
+.checkout-success__link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 .checkout-page__title {
@@ -238,6 +276,40 @@
   font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text);
+}
+
+.checkout-card-form {
+  margin-top: 16px;
+  padding: var(--space-4);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-md);
+}
+
+.checkout-input--mono {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.08em;
+}
+
+.checkout-test-card-btn {
+  background: none;
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-md);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.checkout-test-card-btn:hover { background: var(--color-primary-soft); }
+
+.checkout-server-error {
+  color: #c62828;
+  background: #fdecea;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 12px;
 }
 
 @media (max-width: 900px) {

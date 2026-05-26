@@ -1,10 +1,21 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard/ProductCard.jsx'
-import { products } from '../data/products.js'
+import { api } from '../api/api.js'
 import './FavoritesPage.css'
 
-export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart }) {
-  const favProducts = products.filter((p) => favorites.includes(p.id))
+export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart, cart = [] }) {
+  const [allProducts, setAllProducts] = useState([])
+  const [loading,     setLoading]     = useState(true)
+
+  useEffect(() => {
+    api.get('/products')
+      .then(setAllProducts)
+      .catch(() => {})
+      .finally(() => setLoading(false))
+  }, [])
+
+  const favProducts = allProducts.filter((p) => favorites.includes(p.id))
 
   return (
     <div className="favorites-page">
@@ -16,7 +27,11 @@ export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart
           )}
         </h1>
 
-        {favProducts.length === 0 ? (
+        {loading ? (
+          <div className="favorites-page__empty">
+            <p style={{ color: 'var(--color-text-muted)' }}>🌿 Загружаем...</p>
+          </div>
+        ) : favProducts.length === 0 ? (
           <div className="favorites-page__empty">
             <div className="favorites-page__empty-icon">♡</div>
             <h2 className="favorites-page__empty-title">Здесь пока пусто</h2>
@@ -35,6 +50,7 @@ export default function FavoritesPage({ favorites, onToggleFavorite, onAddToCart
                 isFavorite
                 onToggleFavorite={onToggleFavorite}
                 onAddToCart={onAddToCart}
+                inCart={cart.some(i => i.id === product.id)}
               />
             ))}
           </div>

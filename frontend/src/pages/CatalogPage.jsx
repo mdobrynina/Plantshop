@@ -1,41 +1,51 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Sidebar from '../components/Catalog/Sidebar.jsx'
 import ProductCard from '../components/ProductCard/ProductCard.jsx'
-import { products } from '../data/products.js'
+import { api } from '../api/api.js'
 import './CatalogPage.css'
 
 const SORT_OPTIONS = [
-  { value: 'popular',   label: 'По популярности' },
-  { value: 'price_asc', label: 'Сначала дешёвые' },
+  { value: 'popular',    label: 'По популярности' },
+  { value: 'price_asc',  label: 'Сначала дешёвые' },
   { value: 'price_desc', label: 'Сначала дорогие' },
-  { value: 'name',      label: 'По алфавиту' },
+  { value: 'name',       label: 'По алфавиту' },
 ]
 
 const CARE_OPTIONS = ['легко', 'средне', 'сложно']
 
-export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }) {
+export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart, cartIds = new Set() }) {
   const [searchParams] = useSearchParams()
   const activeCategory = searchParams.get('category')
   const query = searchParams.get('q')?.toLowerCase().trim() ?? ''
 
-  const [sort,         setSort]        = useState('popular')
-  const [careFilters,  setCareFilters] = useState([])
-  const [maxPrice,     setMaxPrice]    = useState('')
-  const [filtersOpen,  setFiltersOpen] = useState(false)
+  const [sort,        setSort]        = useState('popular')
+  const [careFilters, setCareFilters] = useState([])
+  const [maxPrice,    setMaxPrice]    = useState('')
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [products,    setProducts]    = useState([])
+  const [loading,     setLoading]     = useState(true)
+  const [error,       setError]       = useState(null)
 
-  const toggleCare = (c) =>
-    setCareFilters((prev) =>
-      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
-    )
+  useEffect(() => {
+    setLoading(true)
+    setError(null)
+    const params = new URLSearchParams()
+    if (activeCategory) params.set('category', activeCategory)
+    if (query)          params.set('q', query)
+    api.get(`/products?${params}`)
+      .then(setProducts)
+      .catch(() => setError('Не удалось загрузить товары. Проверь, что бэкенд запущен.'))
+      .finally(() => setLoading(false))
+  }, [activeCategory, query])
 
+  const toggleCare  = (c) =>
+    setCareFilters((prev) => prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c])
   const resetFilters = () => { setCareFilters([]); setMaxPrice('') }
 
   const filtered = products
-    .filter((p) => (activeCategory ? p.category === activeCategory : true))
-    .filter((p) => (query ? p.name.toLowerCase().includes(query) || p.categoryName.toLowerCase().includes(query) : true))
-    .filter((p) => (careFilters.length ? careFilters.includes(p.care) : true))
-    .filter((p) => (maxPrice ? p.price <= Number(maxPrice) : true))
+    .filter((p) => careFilters.length ? careFilters.includes(p.care) : true)
+    .filter((p) => maxPrice ? p.price <= Number(maxPrice) : true)
     .sort((a, b) => {
       if (sort === 'price_asc')  return a.price - b.price
       if (sort === 'price_desc') return b.price - a.price
@@ -46,7 +56,7 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
   const title = query
     ? `Результаты поиска: «${searchParams.get('q')}»`
     : activeCategory
-      ? filtered[0]?.categoryName ?? products.find((p) => p.category === activeCategory)?.categoryName ?? 'Каталог'
+      ? filtered[0]?.categoryName ?? 'Каталог'
       : 'Популярные растения'
 
   const hasActiveFilters = careFilters.length > 0 || maxPrice
@@ -59,22 +69,14 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
         <main className="catalog-main">
           <div className="catalog-toolbar">
             <h2 className="catalog-main__title">{title}</h2>
-
             <div className="catalog-toolbar__right">
-              {/* Кнопка фильтров */}
               <button
                 className={`catalog-filter-btn ${hasActiveFilters ? 'catalog-filter-btn--active' : ''}`}
                 onClick={() => setFiltersOpen((v) => !v)}
               >
                 ⚙ Фильтры {hasActiveFilters && `(${careFilters.length + (maxPrice ? 1 : 0)})`}
               </button>
-
-              {/* Сортировка */}
-              <select
-                className="catalog-sort"
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-              >
+              <select className="catalog-sort" value={sort} onChange={(e) => setSort(e.target.value)}>
                 {SORT_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
@@ -82,7 +84,6 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
             </div>
           </div>
 
-          {/* Панель фильтров */}
           {filtersOpen && (
             <div className="catalog-filters">
               <div className="catalog-filters__group">
@@ -99,28 +100,29 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
                   ))}
                 </div>
               </div>
-
               <div className="catalog-filters__group">
                 <p className="catalog-filters__label">Цена до (₽)</p>
                 <input
-                  type="number"
-                  className="catalog-filters__price"
-                  placeholder="Например: 1500"
-                  value={maxPrice}
+                  type="number" className="catalog-filters__price"
+                  placeholder="Например: 1500" value={maxPrice} min={0}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  min={0}
                 />
               </div>
-
               {hasActiveFilters && (
-                <button className="catalog-filters__reset" onClick={resetFilters}>
-                  Сбросить фильтры
-                </button>
+                <button className="catalog-filters__reset" onClick={resetFilters}>Сбросить фильтры</button>
               )}
             </div>
           )}
 
-          {filtered.length === 0 ? (
+          {loading && (
+            <div className="catalog-main__empty"><p>🌿 Загружаем растения...</p></div>
+          )}
+          {error && (
+            <div className="catalog-main__empty">
+              <p>⚠️ {error}</p>
+            </div>
+          )}
+          {!loading && !error && filtered.length === 0 && (
             <div className="catalog-main__empty">
               <p>🌿 Ничего не найдено</p>
               <p>Попробуй изменить фильтры или выбрать другую категорию</p>
@@ -128,7 +130,8 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
                 <button className="btn btn-secondary" onClick={resetFilters}>Сбросить фильтры</button>
               )}
             </div>
-          ) : (
+          )}
+          {!loading && !error && filtered.length > 0 && (
             <div className="catalog-main__grid">
               {filtered.map((product) => (
                 <ProductCard
@@ -137,6 +140,7 @@ export default function CatalogPage({ favorites, onToggleFavorite, onAddToCart }
                   isFavorite={favorites.includes(product.id)}
                   onToggleFavorite={onToggleFavorite}
                   onAddToCart={onAddToCart}
+                  inCart={cartIds.has(product.id)}
                 />
               ))}
             </div>
