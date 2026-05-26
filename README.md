@@ -301,19 +301,57 @@ frontend/src/
 
 **1. Инструкция по установке и запуску:**
 
+### Требования
+- Java 21
+- Maven
+- PostgreSQL
+- Node.js 18+
+
+### 1. Клонировать репозиторий
 ```bash
-# Клонировать репозиторий
-git clone <url>
+git clone https://github.com/mdobrynina/Plantshop.git
+cd Plantshop
+```
 
-# Запустить бэкенд (требуется Java 21, PostgreSQL)
-# Настроить src/main/resources/application.properties
+### 2. Настроить базу данных
+Создать БД в PostgreSQL:
+```sql
+CREATE DATABASE plantshop;
+```
+
+Открыть файл `src/main/resources/application.properties` и прописать свои данные:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/plantshop
+spring.datasource.username=ВАШ_ЛОГИН
+spring.datasource.password=ВАШ_ПАРОЛЬ
+```
+
+### 3. Запустить бэкенд
+```bash
 mvn spring-boot:run
+```
+Сервер запустится на http://localhost:8080
 
-# Запустить фронтенд
+При первом запуске база данных заполнится автоматически (товары, тестовые пользователи).
+
+### 4. Запустить фронтенд
+```bash
 cd frontend
 npm install
 npm run dev
 ```
+Сайт откроется на http://localhost:5173
+
+---
+
+### Тестовые аккаунты
+
+| Роль | Email | Пароль |
+|---|---|---|
+| Администратор | admin@moh.ru | admin123 |
+| Флорист | florist@moh.ru | florist123 |
+| Покупатель | Зарегистрироваться через сайт | — |
+
 
 **2. Описание REST API** — эндпоинты сгруппированы по контроллерам. Авторизованные запросы требуют заголовка:
 
@@ -351,17 +389,4 @@ Authorization: Bearer <jwt-token>
 - рабочий стол флориста для управления статусами заказов и складскими остатками;
 - панель администратора для управления каталогом товаров с загрузкой фотографий;
 - личный кабинет с историей заказов и персональными советами по уходу за купленными растениями.
-
-## Установка и запуск
-
-### Требования
-- Java 21
-- Maven
-- PostgreSQL
-- Node.js 18+
-
-### 1. Клонировать репозиторий
-```bash
-git clone https://github.com/mdobrynina/Plantshop.git
-cd Plantshop
 
